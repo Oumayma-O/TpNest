@@ -1,4 +1,4 @@
-import { IsNotEmpty, Length } from 'class-validator';
+import { IsNotEmpty, Length, MinLength } from "class-validator";
 import { validationMessages } from '../validation-messages';
 
 export class AddTodoDto {
@@ -16,6 +16,6 @@ export class AddTodoDto {
   name: string;
 
   @IsNotEmpty({ message: validationMessages.description.required })
-  @Length(10, undefined, { message: validationMessages.description.minlength })
+  @MinLength(10, { message: validationMessages.description.minlength })
   description: string;
 }
