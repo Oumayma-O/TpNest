@@ -1,11 +1,5 @@
 import { TodoStatusEnum } from '../entities/todo';
-import {
-  IsEnum,
-  IsNotEmpty,
-  IsOptional,
-  Length,
-  MinLength,
-} from 'class-validator';
+import { IsEnum, IsOptional, Length, MinLength } from 'class-validator';
 import { validationMessages } from '../validation-messages';
 
 export class UpdateTodoDto {
