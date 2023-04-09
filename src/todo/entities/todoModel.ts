@@ -1,8 +1,18 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  BaseEntity,
+  Column,
+  CreateDateColumn,
+  DeleteDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
+
 import { TodoStatusEnum } from './todo';
+import { TimeEntity } from './TimeEntity';
 
 @Entity()
-export class TodoModel extends BaseEntity {
+export class TodoModel extends TimeEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 

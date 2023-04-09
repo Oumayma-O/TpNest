@@ -33,8 +33,7 @@ export class TodoController {
   addToDo(@Body() newtodo: AddTodoDto) {
     return this.todoService.addToDo(newtodo);
   }
-  @Post('add')
-  @Version('2')
+  @Post('add2')
   async addToDoV2(@Body() newtodo: AddTodoDto): Promise<Todo> {
     return await this.todoService.addTodoV2(newtodo);
   }
@@ -44,13 +43,11 @@ export class TodoController {
     return this.todoService.findById(id);
   }
   @Get('stats/:status')
-  @Version('2')
   async getTodoStats(@Param() param): Promise<any> {
     return await this.todoService.getToDoStatsV2(param.status);
   }
 
   @Get('all')
-  @Version(' 2')
   async getAllToDos(
     @Query('conditions') conditions: TodoSearchParamsDTO,
     @Query('page') page = 1,
@@ -64,14 +61,12 @@ export class TodoController {
     return this.todoService.delete(id);
   }
 
-  @Delete('delete/:id')
-  @Version('2')
+  @Delete('delete2/:id')
   async deleteV2(@Param('id', ParseIntPipe) id: string) {
     return await this.todoService.deleteV2(id);
   }
 
   @Delete('Sdelete/:id')
-  @Version('Z')
   Sdelete(@Param('id') id: string) {
     return this.todoService.Sdelete(id);
   }
@@ -81,14 +76,12 @@ export class TodoController {
     return this.todoService.update(id, newtodo);
   }
 
-  @Put('update/:id')
-  @Version('2')
+  @Put('update2/:id')
   async updateV2(@Param('id') id: string, @Body() newtodo: UpdateTodoDto) {
     return await this.todoService.updateV2(id, newtodo);
   }
 
   @Put('restore/:id')
-  @Version('2')
   async restore(@Param('id') id: string) {
     return await this.todoService.restoreSection(id);
   }

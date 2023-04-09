@@ -1,11 +1,6 @@
-import {
-  BaseEntity as TypeOrmBaseEntity,
-  CreateDateColumn,
-  UpdateDateColumn,
-  DeleteDateColumn,
-} from 'typeorm';
+import { CreateDateColumn, UpdateDateColumn, DeleteDateColumn } from 'typeorm';
 
-export abstract class BaseEntity extends TypeOrmBaseEntity {
+export abstract class TimeEntity {
   @CreateDateColumn({ type: 'timestamp' })
   createdAt: Date;
 

@@ -17,7 +17,7 @@ dotenv.config();
       port: 3306,
       username: 'root',
       // password: process.env.DB_PASSWORD,
-      database: 'myapp',
+      database: 'nesttodo',
       entities: ['dist/**/*.entity{.ts,.js}', TodoModel],
       synchronize: true,
     }),
