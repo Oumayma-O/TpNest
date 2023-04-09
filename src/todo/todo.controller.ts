@@ -20,8 +20,7 @@ import { UpdateTodoDto } from './dto/updateTodo.dto';
 import { TodoService } from 'src/todo/todo.service';
 import { TodoSearchParamsDTO } from './dto/SearchParamsTodo.dto';
 import { TodoModel } from './entities/todoModel';
-import { SelectQueryBuilder } from 'typeorm';
-import { PaginationParamsDto } from './dto/PaginationParams.dto';
+
 
 @Controller('todo')
 export class TodoController {
