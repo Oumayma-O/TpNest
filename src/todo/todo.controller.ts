@@ -19,6 +19,8 @@ import { UpdateTodoDto } from './dto/updateTodo.dto';
 import { TodoService } from 'src/todo/todo.service';
 import { TodoSearchParamsDTO } from './dto/SearchParamsTodo.dto';
 import { TodoModel } from './entities/todoModel';
+import { SelectQueryBuilder } from 'typeorm';
+import { PaginationParamsDto } from './dto/PaginationParams.dto';
 
 @Controller('todo')
 export class TodoController {
@@ -43,20 +45,41 @@ export class TodoController {
   findById(@Param('id') id: string): Todo {
     return this.todoService.findById(id);
   }
+
+  @Get('get2/:id')
+  async findById2(@Param('id') id: string): Promise<TodoModel> {
+    return await this.todoService.findById2(id);
+  }
+
   @Get('stats/:status')
-  async getTodoStats(@Param() param): Promise<any> {
+  async getTodoStatsV2(@Param() param): Promise<any> {
     return await this.todoService.getToDoStatsV2(param.status);
   }
-  /*
-  @Get('all')
-  async getAllToDos (
-    @Query('conditions') conditions: TodoSearchParamsDTO,
-    @Query('page') page = 1,
-    @Query('pageSize') pageSize = 10,
-  ) : Promise<TodoModel[]>{
-    return await this.todoService.getAllToDos(conditions, page, pageSize);
+
+  @Get('stats')
+  async getTodoStats(): Promise<any> {
+    return await this.todoService.getToDoStats();
   }
-*/
+
+  @Get('all')
+  async StatusCriteria(
+    @Query('conditions') conditions: TodoSearchParamsDTO,
+  ): Promise<Todo[]> {
+    console.log(conditions);
+    return await this.todoService.StatusCriteria(conditions);
+  }
+
+  @Get('all')
+  async getAll() {
+    return await this.todoService.GetAll();
+  }
+
+  @Get('Paginate')
+  async Paginate(@Query('params') params: PaginationParamsDto) {
+    const { pageNumber, pageSize } = params;
+    return await this.todoService.paginateTodos(pageNumber, pageSize);
+  }
+
   @Delete('delete/:id')
   delete(@Param('id') id: string): Todo[] {
     return this.todoService.delete(id);

@@ -10,7 +10,7 @@ import { AddTodoDto } from 'src/todo/dto/addTodo.dto';
 import { UpdateTodoDto } from 'src/todo/dto/updateTodo.dto';
 import { TOKENS } from '../common-module/common-module.module';
 
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 import { TodoSearchParamsDTO } from './dto/SearchParamsTodo.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { TodoModel } from './entities/todoModel';
@@ -27,23 +27,37 @@ export class TodoService {
   ) {}
 
   findAll(): Todo[] {
-    console.log(`get all `);
+    console.log(`find all `);
     return this.todos;
   }
+  async GetAll(): Promise<TodoModel[]> {
+    console.log(`get all `);
+    return this.ToDoRepository.find();
+  }
 
-  /* async getAllToDos(conditions: TodoSearchParamsDTO) {
+  async StatusCriteria(conditions: TodoSearchParamsDTO): Promise<Todo[]> {
     const { status, criteria } = conditions;
-    if (status || criteria) {
+    if (!status && !criteria) {
+      return await this.ToDoRepository.find();
+    } else if (status || criteria) {
+      const nameQuery = Like(`%${criteria}%`);
+      const descriptionQuery = Like(`%${criteria}%`);
+      const statusQuery = status;
       return await this.ToDoRepository.find({
         where: [
-          { name: Like(`%${criteria}%`) },
-          { description: Like(`%${criteria}%`) },
-          { status: status },
+          { name: nameQuery, status: statusQuery },
+          { description: descriptionQuery, status: statusQuery },
         ],
       });
     }
-    return await this.ToDoRepository.find();
-  }*/
+  }
+
+  async paginateTodos(page: number, offset: number) {
+    return await this.ToDoRepository.find({
+      skip: offset * page,
+      take: offset,
+    });
+  }
 
   /* async getAllToDos(
     conditions: TodoSearchParamsDTO,
@@ -108,15 +122,14 @@ export class TodoService {
     if (!todo) return todo;
     throw new NotFoundException(`Le todo d'id ${id} n'existe pas`);
   }
-  /*async findById2(id: string): Promise<TodoModel> {
-    const todo = await this.ToDoRepository.findOneBy()
+  async findById2(id: string): Promise<TodoModel> {
+    const todo = await this.ToDoRepository.findOneBy({ id });
     if (!todo) {
       throw new NotFoundException(`Todo with id ${id} not found`);
     }
     return todo;
   }
 
-  */
   delete(id: string): Todo[] {
     const index = this.todos.findIndex((todo) => todo.id == id);
     console.log(`delete item `);
