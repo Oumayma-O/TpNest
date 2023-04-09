@@ -21,7 +21,6 @@ import { TodoService } from 'src/todo/todo.service';
 import { TodoSearchParamsDTO } from './dto/SearchParamsTodo.dto';
 import { TodoModel } from './entities/todoModel';
 
-
 @Controller('todo')
 export class TodoController {
   constructor(private todoService: TodoService) {}

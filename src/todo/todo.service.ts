@@ -10,11 +10,10 @@ import { AddTodoDto } from 'src/todo/dto/addTodo.dto';
 import { UpdateTodoDto } from 'src/todo/dto/updateTodo.dto';
 import { TOKENS } from '../common-module/common-module.module';
 
-import { In, Like, Repository } from "typeorm";
+import { Like, Repository } from 'typeorm';
 import { TodoSearchParamsDTO } from './dto/SearchParamsTodo.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { TodoModel } from './entities/todoModel';
-
 
 @Injectable()
 export class TodoService {
