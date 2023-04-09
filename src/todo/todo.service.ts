@@ -10,10 +10,11 @@ import { AddTodoDto } from 'src/todo/dto/addTodo.dto';
 import { UpdateTodoDto } from 'src/todo/dto/updateTodo.dto';
 import { TOKENS } from '../common-module/common-module.module';
 
-import { Like, Repository } from 'typeorm';
+import { In, Like, Repository } from "typeorm";
 import { TodoSearchParamsDTO } from './dto/SearchParamsTodo.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { TodoModel } from './entities/todoModel';
+
 
 @Injectable()
 export class TodoService {
@@ -50,6 +51,26 @@ export class TodoService {
         ],
       });
     }
+    /* const { status, criteria } = conditions;
+    const qb = this.ToDoRepository.createQueryBuilder('todo');
+    if (status) {
+      await qb
+        .where({
+          status: In([
+            TodoStatusEnum.actif,
+            TodoStatusEnum.done,
+            TodoStatusEnum.waiting,
+          ]),
+        })
+        .getRawMany();
+    }
+    if (criteria) {
+      return await qb
+        .where('todo.name= :criteria OR todo.description= :criteria')
+        .setParameters({ criteria })
+        .getRawMany();
+    }
+    return await this.GetAll();*/
   }
 
   async paginateTodos(page: number, offset: number) {

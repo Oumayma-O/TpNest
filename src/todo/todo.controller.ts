@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  DefaultValuePipe,
   Delete,
   Get,
   Param,
@@ -61,23 +62,27 @@ export class TodoController {
     return await this.todoService.getToDoStats();
   }
 
+  @Get('all2')
+  async getAll() {
+    return await this.todoService.GetAll();
+  }
+
   @Get('all')
   async StatusCriteria(
-    @Query('conditions') conditions: TodoSearchParamsDTO,
+    @Query() conditions: TodoSearchParamsDTO,
   ): Promise<Todo[]> {
     console.log(conditions);
     return await this.todoService.StatusCriteria(conditions);
   }
 
-  @Get('all')
-  async getAll() {
-    return await this.todoService.GetAll();
-  }
-
   @Get('Paginate')
-  async Paginate(@Query('params') params: PaginationParamsDto) {
-    const { pageNumber, pageSize } = params;
-    return await this.todoService.paginateTodos(pageNumber, pageSize);
+  async Paginate(
+    @Query('page', new DefaultValuePipe(0), ParseIntPipe) page: number,
+    @Query('offset', new DefaultValuePipe(1), ParseIntPipe) offset: number,
+  ) {
+    console.log(page, offset);
+
+    return await this.todoService.paginateTodos(page, offset);
   }
 
   @Delete('delete/:id')
