@@ -34,7 +34,7 @@ export class TodoController {
     return this.todoService.addToDo(newtodo);
   }
   @Post('add2')
-  async addToDoV2(@Body() newtodo: AddTodoDto): Promise<Todo> {
+  async addToDoV2(@Body() newtodo: AddTodoDto) {
     return await this.todoService.addTodoV2(newtodo);
   }
 

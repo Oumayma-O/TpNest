@@ -97,7 +97,7 @@ export class TodoService {
     return todo;
   }
 
-  async addTodoV2(newtodo: AddTodoDto): Promise<Todo> {
+  async addTodoV2(newtodo: AddTodoDto) {
     return await this.ToDoRepository.save(newtodo);
   }
 
