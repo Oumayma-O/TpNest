@@ -18,6 +18,7 @@ import { AddTodoDto } from './dto/addTodo.dto';
 import { UpdateTodoDto } from './dto/updateTodo.dto';
 import { TodoService } from 'src/todo/todo.service';
 import { TodoSearchParamsDTO } from './dto/SearchParamsTodo.dto';
+import { TodoModel } from './entities/todoModel';
 
 @Controller('todo')
 export class TodoController {
@@ -46,16 +47,16 @@ export class TodoController {
   async getTodoStats(@Param() param): Promise<any> {
     return await this.todoService.getToDoStatsV2(param.status);
   }
-
+  /*
   @Get('all')
-  async getAllToDos(
+  async getAllToDos (
     @Query('conditions') conditions: TodoSearchParamsDTO,
     @Query('page') page = 1,
     @Query('pageSize') pageSize = 10,
-  ) {
+  ) : Promise<TodoModel[]>{
     return await this.todoService.getAllToDos(conditions, page, pageSize);
   }
-
+*/
   @Delete('delete/:id')
   delete(@Param('id') id: string): Todo[] {
     return this.todoService.delete(id);

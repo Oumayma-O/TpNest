@@ -13,6 +13,7 @@ import { TOKENS } from '../common-module/common-module.module';
 import { Repository } from 'typeorm';
 import { TodoSearchParamsDTO } from './dto/SearchParamsTodo.dto';
 import { InjectRepository } from '@nestjs/typeorm';
+import { TodoModel } from './entities/todoModel';
 
 @Injectable()
 export class TodoService {
@@ -21,8 +22,8 @@ export class TodoService {
   todos: Todo[] = [];
 
   constructor(
-    @InjectRepository(Todo)
-    private ToDoRepository: Repository<Todo>,
+    @InjectRepository(TodoModel)
+    private ToDoRepository: Repository<TodoModel>,
   ) {}
 
   findAll(): Todo[] {
@@ -44,11 +45,11 @@ export class TodoService {
     return await this.ToDoRepository.find();
   }*/
 
-  async getAllToDos(
+  /* async getAllToDos(
     conditions: TodoSearchParamsDTO,
     page: number,
     take: number,
-  ) {
+  ): Promise<TodoModel[]> {
     const { status, criteria } = conditions;
     const query = this.ToDoRepository.createQueryBuilder('todo');
 
@@ -88,7 +89,7 @@ export class TodoService {
       page: page,
       pageCount: pageCount,
     };
-  }
+  }*/
 
   addToDo(newtodo: AddTodoDto): Todo {
     const todo = new Todo(this.uuid(), newtodo.name, newtodo.description);
@@ -107,7 +108,15 @@ export class TodoService {
     if (!todo) return todo;
     throw new NotFoundException(`Le todo d'id ${id} n'existe pas`);
   }
+  /*async findById2(id: string): Promise<TodoModel> {
+    const todo = await this.ToDoRepository.findOneBy()
+    if (!todo) {
+      throw new NotFoundException(`Todo with id ${id} not found`);
+    }
+    return todo;
+  }
 
+  */
   delete(id: string): Todo[] {
     const index = this.todos.findIndex((todo) => todo.id == id);
     console.log(`delete item `);
