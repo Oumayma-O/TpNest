@@ -40,7 +40,7 @@ export class TodoController {
   }
 
   @Get('get/:id')
-  findById(@Param('id') id: number): Todo {
+  findById(@Param('id') id: string): Todo {
     return this.todoService.findById(id);
   }
   @Get('stats/:status')
@@ -60,39 +60,36 @@ export class TodoController {
   }
 
   @Delete('delete/:id')
-  delete(@Param('id') id: number): Todo[] {
+  delete(@Param('id') id: string): Todo[] {
     return this.todoService.delete(id);
   }
 
   @Delete('delete/:id')
   @Version('2')
-  async deleteV2(@Param('id', ParseIntPipe) id: number) {
+  async deleteV2(@Param('id', ParseIntPipe) id: string) {
     return await this.todoService.deleteV2(id);
   }
 
   @Delete('Sdelete/:id')
   @Version('Z')
-  Sdelete(@Param('id') id: number) {
+  Sdelete(@Param('id') id: string) {
     return this.todoService.Sdelete(id);
   }
 
   @Put('update/:id')
-  update(@Param('id') id: number, @Body() newtodo: UpdateTodoDto): Todo {
+  update(@Param('id') id: string, @Body() newtodo: UpdateTodoDto): Todo {
     return this.todoService.update(id, newtodo);
   }
 
   @Put('update/:id')
   @Version('2')
-  async updateV2(@Param('id') id: number, @Body() newtodo: UpdateTodoDto) {
+  async updateV2(@Param('id') id: string, @Body() newtodo: UpdateTodoDto) {
     return await this.todoService.updateV2(id, newtodo);
   }
 
   @Put('restore/:id')
   @Version('2')
-  async restore(@Param('id') id: number) {
+  async restore(@Param('id') id: string) {
     return await this.todoService.restoreSection(id);
   }
-}
-function restore() {
-  throw new Error('Function not implemented.');
 }

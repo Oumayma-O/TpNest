@@ -16,7 +16,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class TodoService {
-  @Inject(TOKENS.uuid) uuid: () => number;
+  @Inject('UUID') private readonly uuid: () => string;
 
   todos: Todo[] = [];
 
@@ -101,14 +101,14 @@ export class TodoService {
     return await this.ToDoRepository.save(newtodo);
   }
 
-  findById(id: number): Todo {
+  findById(id: string): Todo {
     console.log(`get item `);
     const todo = this.todos.find((todo) => todo.id == id);
     if (!todo) return todo;
     throw new NotFoundException(`Le todo d'id ${id} n'existe pas`);
   }
 
-  delete(id: number): Todo[] {
+  delete(id: string): Todo[] {
     const index = this.todos.findIndex((todo) => todo.id == id);
     console.log(`delete item `);
     if (index >= 0) {
@@ -118,7 +118,7 @@ export class TodoService {
     }
   }
 
-  async deleteV2(id: number) {
+  async deleteV2(id: string) {
     /*
     const ToDoRemove = this.todos.find((todo) => todo.id == id);
     if (ToDoRemove == null) throw new BadRequestException();
@@ -127,11 +127,11 @@ export class TodoService {
     return await this.ToDoRepository.delete(id);
   }
 
-  async Sdelete(id: number) {
+  async Sdelete(id: string) {
     return await this.ToDoRepository.softDelete(id);
   }
 
-  update(id: number, newtodo: UpdateTodoDto): Todo {
+  update(id: string, newtodo: UpdateTodoDto): Todo {
     const t: Todo = this.findById(id);
     t.name = newtodo.name;
     t.description = newtodo.description;
@@ -140,7 +140,7 @@ export class TodoService {
     return t;
   }
 
-  async updateV2(id: number, newToDo: UpdateTodoDto) {
+  async updateV2(id: string, newToDo: UpdateTodoDto) {
     /*const newTD = await this.ToDoRepository.preload({
       id,
       ...newToDo,
@@ -150,7 +150,7 @@ export class TodoService {
     return await this.ToDoRepository.update(id, { ...newToDo });
   }
 
-  async restoreSection(id: number) {
+  async restoreSection(id: string) {
     return await this.ToDoRepository.restore(id);
   }
   async getToDoStats(): Promise<any> {
