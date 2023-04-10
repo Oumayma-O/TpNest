@@ -14,6 +14,7 @@ import { Like, Repository } from 'typeorm';
 import { TodoSearchParamsDTO } from './dto/SearchParamsTodo.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { TodoModel } from './entities/todoModel';
+import { userInfo } from "os";
 
 @Injectable()
 export class TodoService {
@@ -125,15 +126,26 @@ export class TodoService {
     };
   }*/
 
-  addToDo(newtodo: AddTodoDto): Todo {
-    const todo = new Todo(this.uuid(), newtodo.name, newtodo.description);
+  addToDo(newtodo: AddTodoDto, userId: string): Todo {
+    const todo = new Todo(
+      userId,
+      this.uuid(),
+      newtodo.name,
+      newtodo.description,
+    );
     console.log(`add item `);
     this.todos.push(todo);
     return todo;
   }
 
-  async addTodoV2(newtodo: AddTodoDto) {
-    return await this.ToDoRepository.save(newtodo);
+  async addTodoV2(newtodo: AddTodoDto, userId: string) {
+    const todo = new Todo(
+      userId,
+      this.uuid(),
+      newtodo.name,
+      newtodo.description,
+    );
+    return await this.ToDoRepository.save(todo);
   }
 
   findById(id: string): Todo {
@@ -150,7 +162,11 @@ export class TodoService {
     return todo;
   }
 
-  delete(id: string): Todo[] {
+  delete(id: string, userId: string): Todo[] {
+    const todo = this.todos.find((todo) => todo.id == id);
+    if (todo.userId !== userId) {
+      throw new Error('Unauthorized');
+    }
     const index = this.todos.findIndex((todo) => todo.id == id);
     console.log(`delete item `);
     if (index >= 0) {
@@ -160,21 +176,27 @@ export class TodoService {
     }
   }
 
-  async deleteV2(id: string) {
-    /*
-    const ToDoRemove = this.todos.find((todo) => todo.id == id);
-    if (ToDoRemove == null) throw new BadRequestException();
-    return await this.ToDoRepository.remove(ToDoRemove);*/
-
-    return await this.ToDoRepository.delete(id);
+  async deleteV2(id: string, userId: string): Promise<void> {
+    const todo = await this.ToDoRepository.findOneBy({ id });
+    if (todo.userId !== userId) {
+      throw new Error('Unauthorized');
+    }
+    await this.ToDoRepository.delete(id);
   }
 
-  async Sdelete(id: string) {
+  async Sdelete(id: string, userId: string) {
+    const todo = await this.ToDoRepository.findOneBy({ id });
+    if (todo.userId !== userId) {
+      throw new Error('Unauthorized');
+    }
     return await this.ToDoRepository.softDelete(id);
   }
 
-  update(id: string, newtodo: UpdateTodoDto): Todo {
+  update(id: string, newtodo: UpdateTodoDto, userId: string): Todo {
     const t: Todo = this.findById(id);
+    if (t.userId !== userId) {
+      throw new Error('Unauthorized');
+    }
     t.name = newtodo.name;
     t.description = newtodo.description;
     t.status = newtodo.status;
@@ -182,17 +204,24 @@ export class TodoService {
     return t;
   }
 
-  async updateV2(id: string, newToDo: UpdateTodoDto) {
+  async updateV2(id: string, newToDo: UpdateTodoDto, userId: string) {
     /*const newTD = await this.ToDoRepository.preload({
       id,
       ...newToDo,
     });
     return await this.ToDoRepository.save(newTD);*/
-
+    const todo = await this.ToDoRepository.findOneBy({ id });
+    if (todo.userId !== userId) {
+      throw new Error('Unauthorized');
+    }
     return await this.ToDoRepository.update(id, { ...newToDo });
   }
 
-  async restoreSection(id: string) {
+  async restoreSection(id: string, userId: string) {
+    const todo = await this.ToDoRepository.findOneBy({ id });
+    if (todo.userId !== userId) {
+      throw new Error('Unauthorized');
+    }
     return await this.ToDoRepository.restore(id);
   }
   async getToDoStats(): Promise<any> {

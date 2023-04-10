@@ -1,4 +1,4 @@
-import { IsNotEmpty, Length, MinLength } from 'class-validator';
+import { IsNotEmpty, IsNumber, Length, MinLength } from 'class-validator';
 import { validationMessages } from '../validation-messages';
 
 export class AddTodoDto {

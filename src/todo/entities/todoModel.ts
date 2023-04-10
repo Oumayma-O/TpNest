@@ -28,4 +28,7 @@ export class TodoModel extends TimeEntity {
     default: TodoStatusEnum.waiting,
   })
   status: TodoStatusEnum;
+
+  @Column({ update: false })
+  userId: string;
 }

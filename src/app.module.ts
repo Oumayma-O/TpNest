@@ -12,6 +12,9 @@ import { CommonModuleModule } from './common-module/common-module.module';
 import * as dotenv from 'dotenv';
 import { TodoModel } from './todo/entities/todoModel';
 import { AuthMiddleware } from './middlewares/auth-middleware/auth.middleware';
+import { JwtModule } from '@nestjs/jwt';
+import { AuthService } from './auth/auth.service';
+import { AuthModule } from './auth/auth.module';
 
 dotenv.config();
 
@@ -24,14 +27,19 @@ dotenv.config();
       port: 3306,
       username: 'root',
       // password: process.env.DB_PASSWORD,
-      database: 'nesttodo',
+      database: 'test',
       entities: ['dist/**/*.entity{.ts,.js}', TodoModel],
       synchronize: true,
     }),
     CommonModuleModule,
+    JwtModule.register({
+      secret: 'your-secret-key',
+      signOptions: { expiresIn: '1h' },
+    }),
+    AuthModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, AuthService],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer): any {

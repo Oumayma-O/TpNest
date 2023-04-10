@@ -11,4 +11,9 @@ export const validationMessages = {
   status: {
     isIn: "Le statut doit être l'une des valeurs suivantes : actif, waiting, done",
   },
+
+  userId: {
+    required: 'le userId est obligatoire',
+    number: ' le userId doit etre un nombre',
+  },
 };

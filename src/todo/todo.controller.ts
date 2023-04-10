@@ -10,8 +10,6 @@ import {
   Put,
   Query,
   Req,
-  Res,
-  Version,
 } from '@nestjs/common';
 import { Todo } from './entities/todo';
 import { async, findIndex } from 'rxjs';
@@ -20,7 +18,6 @@ import { UpdateTodoDto } from './dto/updateTodo.dto';
 import { TodoService } from 'src/todo/todo.service';
 import { TodoSearchParamsDTO } from './dto/SearchParamsTodo.dto';
 import { TodoModel } from './entities/todoModel';
-
 @Controller('todo')
 export class TodoController {
   constructor(private todoService: TodoService) {}
@@ -32,12 +29,15 @@ export class TodoController {
   }
 
   @Post('add')
-  addToDo(@Body() newtodo: AddTodoDto) {
-    return this.todoService.addToDo(newtodo);
+  addToDo(@Body() newtodo: AddTodoDto, @Req() req) {
+    return this.todoService.addToDo(newtodo, req.userId);
   }
+
   @Post('add2')
-  async addToDoV2(@Body() newtodo: AddTodoDto) {
-    return await this.todoService.addTodoV2(newtodo);
+  async addToDoV2(@Body() newtodo: AddTodoDto, @Req() req) {
+    const userId = req['userId'];
+    console.log(userId);
+    return await this.todoService.addTodoV2(newtodo, userId);
   }
 
   @Get('get/:id')
@@ -84,32 +84,40 @@ export class TodoController {
   }
 
   @Delete('delete/:id')
-  delete(@Param('id') id: string): Todo[] {
-    return this.todoService.delete(id);
+  delete(@Param('id') id: string, @Req() req): Todo[] {
+    return this.todoService.delete(id, req.userId);
   }
 
   @Delete('delete2/:id')
-  async deleteV2(@Param('id', ParseIntPipe) id: string) {
-    return await this.todoService.deleteV2(id);
+  async deleteV2(@Param('id', ParseIntPipe) id: string, @Req() req) {
+    return await this.todoService.deleteV2(id, req.userId);
   }
 
   @Delete('Sdelete/:id')
-  Sdelete(@Param('id') id: string) {
-    return this.todoService.Sdelete(id);
+  Sdelete(@Param('id') id: string, @Req() req) {
+    return this.todoService.Sdelete(id, req.userId);
   }
 
   @Put('update/:id')
-  update(@Param('id') id: string, @Body() newtodo: UpdateTodoDto): Todo {
-    return this.todoService.update(id, newtodo);
+  update(
+    @Param('id') id: string,
+    @Body() newtodo: UpdateTodoDto,
+    @Req() req,
+  ): Todo {
+    return this.todoService.update(id, newtodo, req.userId);
   }
 
   @Put('update2/:id')
-  async updateV2(@Param('id') id: string, @Body() newtodo: UpdateTodoDto) {
-    return await this.todoService.updateV2(id, newtodo);
+  async updateV2(
+    @Param('id') id: string,
+    @Body() newtodo: UpdateTodoDto,
+    @Req() req,
+  ) {
+    return await this.todoService.updateV2(id, newtodo, req.userId);
   }
 
   @Put('restore/:id')
-  async restore(@Param('id') id: string) {
-    return await this.todoService.restoreSection(id);
+  async restore(@Param('id') id: string, @Req() req) {
+    return await this.todoService.restoreSection(id, req.userId);
   }
 }
